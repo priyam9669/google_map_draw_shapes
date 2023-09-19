@@ -27,12 +27,15 @@ export class HomePage {
   mapElement!: ElementRef;
   
   map: any;
-  driver_marker: any;
+  //driver_marker: any;
+  themeToggle = false;
 
   constructor(
     private geolocation: Geolocation,
     public alertController: AlertController
   ) {
+
+   
 
     this.geolocation.getCurrentPosition().then((resp) => {
       let coordinates=resp;
@@ -51,39 +54,72 @@ export class HomePage {
 
 
   citymap = [
-    {
-      name:'chicago', 
-      center: { lat: 41.878, lng: -87.629 },
-      population: 2714856,
-      details:"C",
-    },
-    {
-      name:'newyork', 
-      center: { lat: 40.714, lng: -74.005 },
-      population: 8405837,
-      details:"n",
-
-    },
-    {
-      name:'losangeles', 
-      center: { lat: 34.052, lng: -118.243 },
-      population: 3857799,
-      details:"l",
-
-    },
-    {
-      name:'Kolkata', 
-      center: { lat:22.5726, lng: 88.3639 },
-      population: 603502,
-      details:"v",
-
-    },
+     {
+          "name": "Property 1",
+          "lat": 12.917261,
+          "long": 77.612523,
+          "status": "available"
+        },
+        {
+          "name": "Property 2",
+          "lat": 12.230305,
+          "long": 77.277505,
+          "status": "live"
+        },
+        {
+          "name": "Property 3",
+          "lat": 12.317272,
+          "long": 77.314532,
+          "status": "available"
+        },
+        {
+          "name": "Property 4",
+          "lat": 12.470375,
+          "long": 77.427205,
+          "status": "live"
+        },
+        {
+          "name": "Property 5",
+          "lat": 12.517281,
+          "long": 77.552543,
+          "status": "available"
+        },
+        {
+          "name": "Property 6",
+          "lat": 12.630705,
+          "long": 77.677565,
+          "status": "live"
+        },
+        {
+          "name": "Property 7",
+          "lat": 12.717251,
+          "long": 77.712543,
+          "status": "available"
+        },
+        {
+          "name": "Property 8",
+          "lat": 12.830805,
+          "long": 77.877205,
+          "status": "live"
+        },
+        {
+          "name": "Property 9",
+          "lat": 12.917961,
+          "long": 77.912543,
+          "status": "available"
+        },
+        {
+          "name": "Property 10",
+          "lat": 12.100365,
+          "long": 77.107545,
+          "status": "live"
+        }
   ];
 
   loadmap(coordinates: Position){
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
-      center: { lat: -34.9011, lng: -56.1645 },
-      zoom: 5,
+      center: { lat: 12.917261, lng: 77.612523 },
+      zoom: 13,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       mapTypeControl: true,
       streetViewControl: true,
@@ -93,10 +129,10 @@ export class HomePage {
     //this.geolocation.getCurrentPosition().then(resp => {
       //console.log('resp', resp)
 
-      let pos = {
-        lat: coordinates.coords.latitude,
-        lng: coordinates.coords.longitude
-      };
+      // let pos = {
+      //   lat: coordinates.coords.latitude,
+      //   lng: coordinates.coords.longitude
+      // };
       // this.driver_marker = new google.maps.Marker({
       //   position: pos,
       //   map: this.map,
@@ -106,7 +142,7 @@ export class HomePage {
       // });
       //marker.setAnimation(google.maps.Animation.BOUNCE);
       //this.markers.push(marker);
-      this.map.setCenter(pos);
+      //this.map.setCenter(pos);
       //this.map.setZoom(13)
     // }).catch((error) => {
     //   console.log('Error getting location', error);
@@ -127,14 +163,14 @@ export class HomePage {
       
       // Add the circle for this city to the map.
       const cityCircle = new google.maps.Circle({
-        strokeColor: "#FF0000",
+        strokeColor: element.status=="live"?"#15e84d":"#f2eb13",
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: "#FF0000",
+        fillColor: element.status=="live"?"#8ceda6":"#e3e086",
         fillOpacity: 0.35,
         map,
-        center: element.center,//this.citymap[city].center,
-        radius: 50000,//citymap[city]
+        center: {lat:element.lat,lng:element.long},//this.citymap[city].center,
+        radius: 1000,//citymap[city]
       });
 
       // const infowindow = new google.maps.InfoWindow({
@@ -163,12 +199,25 @@ async presentAlertMultipleButtons(details: any) {
   const alert = await this.alertController.create({
     cssClass: 'my-custom-class',
     header: details.name,
-    subHeader: details.details,
+    subHeader: details.status,
     message: details.population,
-    buttons: ['Cancel', 'ok'],
+    buttons: ['Cancel', details.status=="live"?'buy':"ok"],
   });
 
   await alert.present();
+}
+
+
+
+ // Listen for the toggle check/uncheck to toggle the dark theme
+ toggleChange(ev:any) {
+  this.toggleDarkTheme(ev.detail.checked);
+}
+
+// Add or remove the "dark" class on the document body
+toggleDarkTheme(shouldAdd: boolean | undefined) {
+  //document.body.classList.toggle('dark', shouldAdd);
+  document.body.setAttribute("color-scheme",shouldAdd?"dark":"light");
 }
 
 

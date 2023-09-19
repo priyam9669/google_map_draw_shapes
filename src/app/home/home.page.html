@@ -1,8 +1,15 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Map
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="dark">
+        <ion-toggle [(ngModel)]="themeToggle" (ionChange)="toggleChange($event)" justify="space-between"
+        >Dark Mode</ion-toggle
+      >
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
